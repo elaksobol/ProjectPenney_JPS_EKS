@@ -1,6 +1,7 @@
 # Based on our class example?
 
 import numpy as np
+from pathlib import Path
 PATH_DECKS = Path('data/decks/')
 PATH_SEED_LOG = Path('data/seed.json')
 SEED_BASE = 1
@@ -14,10 +15,11 @@ def gen_decks(seed: int,
     deck = np.array([1]*26 + [0]*26)
     decks = np.empty((n_decks, 52), dtype = int)
 
-    for _ in range(n_decks):
+    for i in range(n_decks):
         decks[i] = rng.permutation(deck)
         
-    return rng.integers(size=(n_decks))
+    #return rng.integers(size=(n_decks))
+    return decks
 
 
 def get_next_seed() -> int:
@@ -65,6 +67,8 @@ def save_decks(decks: np.ndarray,
     filename = PATH_DECKS / f'decks_{n_decks}_seed_{seed}.bin'
 
     packed.tofile(filename)
+
+    np.savez_compressed('...data/filename.npz', my_bits = packed)
     
     print(f'I might save this file like: {filename}')
     return filename
