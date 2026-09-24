@@ -2,9 +2,15 @@
 
 import numpy as np
 from pathlib import Path
+import json
+from datetime import datetime as dt
+
+
+
 PATH_DECKS = Path('data/decks/')
 PATH_SEED_LOG = Path('data/seed.json')
 SEED_BASE = 1
+N_CARDS = 52
 
 def gen_decks(seed: int, 
                n_decks: int,
@@ -64,13 +70,11 @@ def save_decks(decks: np.ndarray,
 
     packed = np.packbits(decks, axis = 1)
 
-    filename = PATH_DECKS / f'decks_{n_decks}_seed_{seed}.bin'
+    filename = PATH_DECKS / f'decks_{n_decks}_seed_{seed}.npz'
 
-    packed.tofile(filename)
-
-    np.savez_compressed('...data/filename.npz', my_bits = packed)
+    np.savez(filename, decks=packed, seed=seed)
     
-    print(f'I might save this file like: {filename}')
+    print(f'This file was saved as: {filename}')
     return filename
 
 

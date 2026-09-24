@@ -1,7 +1,11 @@
-# Based on our class example?
 
 import numpy as np
 from pathlib import Path
+import json
+from datetime import datetime as dt
+
+
+
 PATH_DECKS = Path('data/decks/')
 PATH_SEED_LOG = Path('data/seed.json')
 SEED_BASE = 1
@@ -12,14 +16,16 @@ def gen_decks(seed: int,
     
     rng = np.random.default_rng(seed)
 
-    deck = np.array([1]*26 + [0]*26)
-    decks = np.empty((n_decks, 52), dtype = int)
+    # dtype = np.uint8 uses 8x less memory before packing, nothing else changes
+    deck = np.array([1]*26 + [0]*26, dtype=np.uint8)
+    decks = np.empty((n_decks, 52), dtype=np.uint8)
 
     for i in range(n_decks):
         decks[i] = rng.permutation(deck)
         
-    #return rng.integers(size=(n_decks))
     return decks
+
+
 
 
 def get_next_seed() -> int:
@@ -50,27 +56,23 @@ def get_next_seed() -> int:
     return seed
 
 
+
+
 def save_decks(decks: np.ndarray, 
                seed: int
               ) -> Path:
-    '''
-    This doesn't actually save anything,
-    it is just a demo of how I might construct
-    the filename.
-    '''
+   
     PATH_DECKS.mkdir(parents=True, exist_ok=True)
 
     n_decks = decks.shape[0]
 
     packed = np.packbits(decks, axis = 1)
 
-    filename = PATH_DECKS / f'decks_{n_decks}_seed_{seed}.bin'
+    filename = PATH_DECKS / f'decks_{n_decks}_seed_{seed}.npz'
 
-    packed.tofile(filename)
-
-    np.savez_compressed('...data/filename.npz', my_bits = packed)
+    np.savez(filename, my_bits=packed, seed=seed)
     
-    print(f'I might save this file like: {filename}')
+    print(f'This file was saved as: {filename}')
     return filename
 
 
