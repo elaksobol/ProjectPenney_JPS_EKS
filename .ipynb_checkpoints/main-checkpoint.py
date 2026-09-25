@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 from src.dataproc import score_decks, save_scores
-import src.datagen import gen_decks, get_next_seed
+from src.datagen import gen_decks, get_next_seed
 from src.heatmap import make_heatmaps, PATH_FIGURES
 
 
