@@ -161,7 +161,7 @@ def save_score_summary() -> Path:
     filename = PATH_SCORES / 'scores.csv'
     score_files = list(PATH_SCORES.glob('scores_*.npz'))
     if not score_files:
-        print('Nos core files found.')
+        print('No score files found.')
         return filename
 
     score_list = []
