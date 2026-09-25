@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 
-from dataproc import LABELS, PATH_SCORES
+from src.dataproc import LABELS, PATH_SCORES
 
 PATH_FIGURES = Path('figures/')
 

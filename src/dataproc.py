@@ -170,12 +170,12 @@ def save_score_summary() -> Path:
         loaded_data = np.load(score_file)
         score_list.append(loaded_data['scores'])
 
-    all_scores = np.concatenate(scores_list, axis = 3)
+    all_scores = np.concatenate(score_list, axis = 3)
     n_decks = all_scores.shape[3]
 
     with filename.open('w', newline = '') as f:
         writer = csv.writer(f)
-        writer.writerow(['n_decks', 'P1', 'P2', 'trick wins', 'trick ties', 'card wins', 'card ties'])
+        writer.writerow(['n_decks', 'P1', 'P2', 'tricks_wins', 'tricks_ties', 'cards_wins', 'cards_ties'])
 
         for a, P1 in enumerate(LABELS):
             for b, P2 in enumerate(LABELS):

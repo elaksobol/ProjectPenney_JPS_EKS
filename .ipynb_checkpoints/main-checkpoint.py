@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 from src.dataproc import score_decks, save_scores
-from src.datagen import gen_decks, get_next_seed
+from src.datagen import gen_decks, get_next_seed, save_decks, save_scores_summary
 from src.heatmap import make_heatmaps, PATH_FIGURES
 
 
@@ -45,6 +45,7 @@ def add_and_rescore():
     save_decks(decks, seed)
     scores = score_decks(decks)
     save_scores(scores, seed)
+    save_score_summary()
     
     make_heatmaps()
     print('Done! Choose option 1 to see the updated heatmaps.')
