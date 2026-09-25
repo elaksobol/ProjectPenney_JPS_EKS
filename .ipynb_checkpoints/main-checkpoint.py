@@ -1,10 +1,64 @@
 import src.datagen as datagen
 
-def main() -> None:
-    print("Hello from projectpenney-jps-eks!")
-    datagen.main()
-    print("The decks are ')
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+from dataproc import score_seeds, save_scores
+from decks import add_decks
+from heatmaps import make_heatmaps, PATH_FIGURES
 
 
-if __name__ == "__main__":
-    main()
+def show_heatmaps():
+  found_any=False
+  for metric in ('cards', 'tricks'):
+    filename = PATH_FIGURES / f'heatmap_{metric}.png'
+
+    if not filename.exists():
+      continue
+    found_any=True
+
+    made = datetime.fromtimestamp(filename.stat().st_mtime)
+    print(f'Showing {filename} (made {made:%Y-%m-%d %H:%M})')
+
+    fig, ax = plt.subplots(figsize=(8,8))
+    ax.imshow(mgimg.imread(filename))
+    ax.axis('off')
+    fig.canvas.manager.set_window_title(f'Heatmap: {metric}')
+
+  if found_any:
+    plt.show()
+  else:
+    print('No heatmaps yet. Choose option 2 to add some decks first.')
+
+
+
+def add_and_rescore():
+  answer = input('How many decks would you like to add?')
+
+  if not answer.isdigit() or int(answer) == 0:
+    print('Please enter a whole number bigger than 0.')
+    return
+
+  add_decks(int(answer))
+  save_scores(score_seeds())
+
+  make_heatmaps()
+  print('Done! Choose option 1 to see the updated heatmaps.')
+
+
+if __name__ == '__main__':
+  while True:
+    print()
+    print('1) See the most recent heatmaps')
+    print('2) Add more decks, score them, and update the heatmaps')
+    print('3) Quit')
+    choice = input('Choose 1, 2, or 3: ')
+
+    if choice == '1':
+      show_heatmaps()
+    elif choice == '2':
+      add_and_rescore()
+    else:
+      print('Please type 1, 2, or 3.')
