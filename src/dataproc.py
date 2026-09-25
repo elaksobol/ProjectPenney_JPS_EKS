@@ -168,7 +168,7 @@ def save_score_summary() -> Path:
 
     for score_file in score_files:
         loaded_data = np.load(score_file)
-        scores_list.append(loaded_data['scores'])
+        score_list.append(loaded_data['scores'])
 
     all_scores = np.concatenate(scores_list, axis = 3)
     n_decks = all_scores.shape[3]

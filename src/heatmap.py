@@ -7,7 +7,7 @@ from pathlib import Path
 
 from dataproc import LABELS, PATH_SCORES
 
-PATH_FIGURES = Path('src/')
+PATH_FIGURES = Path('figures/')
 
 BR_LABELS = [label.replace('0', 'B').replace('1', 'R') for label in LABELS]
 
@@ -33,16 +33,16 @@ def make_matrices(totals, n_decks, metric):
 
 
 
-  def plot_heatmap(wins, ties, n_decks, metric):
+def plot_heatmap(wins, ties, n_decks, metric):
     annot = []
     for b in range(len(LABELS)):
-      row = []
-      for a in range(len(LABELS)):
-        if a == b:
-          row.append('')
-        else: 
-          row.append(f'{wins[b, a]:.0f}({ties[b, a]:.0f})')
-      annot.append(row)
+        row = []
+        for a in range(len(LABELS)):
+            if a == b:
+                row.append('')
+            else: 
+                row.append(f'{wins[b, a]:.0f}({ties[b, a]:.0f})')
+        annot.append(row)
 
 
     fig, ax = plt.subplots(figsize=(8,8))

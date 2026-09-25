@@ -1,13 +1,11 @@
-import src.datagen as datagen
-
 from datetime import datetime
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 from src.dataproc import score_decks, save_scores
-from data.decks import add_decks
-from src.heatmaps import make_heatmaps, PATH_FIGURES
+import src.datagen import gen_decks, get_next_seed
+from src.heatmap import make_heatmaps, PATH_FIGURES
 
 
 def show_heatmaps():
@@ -23,7 +21,7 @@ def show_heatmaps():
     print(f'Showing {filename} (made {made:%Y-%m-%d %H:%M})')
 
     fig, ax = plt.subplots(figsize=(8,8))
-    ax.imshow(mgimg.imread(filename))
+    ax.imshow(mpimg.imread(filename))
     ax.axis('off')
     fig.canvas.manager.set_window_title(f'Heatmap: {metric}')
 
@@ -35,17 +33,21 @@ def show_heatmaps():
 
 
 def add_and_rescore():
-  answer = input('How many decks would you like to add?')
+    answer = input('How many decks would you like to add?')
+    
+    if not answer.isdigit() or int(answer) == 0:
+        print('Please enter a whole number bigger than 0.')
+        return
 
-  if not answer.isdigit() or int(answer) == 0:
-    print('Please enter a whole number bigger than 0.')
-    return
-
-  add_decks(int(answer))
-  save_scores(score_decks())
-
-  make_heatmaps()
-  print('Done! Choose option 1 to see the updated heatmaps.')
+    n_decks = int(answer)
+    seed = get_next_seed()
+    decks = gen_decks(seed, n_decks)
+    save_decks(decks, seed)
+    scores = score_decks(decks)
+    save_scores(scores, seed)
+    
+    make_heatmaps()
+    print('Done! Choose option 1 to see the updated heatmaps.')
 
 
 if __name__ == '__main__':
