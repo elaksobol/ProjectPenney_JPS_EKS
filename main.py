@@ -3,8 +3,8 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-from src.dataproc import score_decks, save_scores
-from src.datagen import gen_decks, get_next_seed, save_decks, save_scores_summary
+from src.dataproc import score_decks, save_scores, save_score_summary
+from src.datagen import gen_decks, get_next_seed, save_decks
 from src.heatmap import make_heatmaps, PATH_FIGURES
 
 
@@ -26,7 +26,7 @@ def show_heatmaps():
     fig.canvas.manager.set_window_title(f'Heatmap: {metric}')
 
   if found_any:
-    plt.show()
+    plt.show(block = False)
   else:
     print('No heatmaps yet. Choose option 2 to add some decks first.')
 
@@ -63,5 +63,8 @@ if __name__ == '__main__':
       show_heatmaps()
     elif choice == '2':
       add_and_rescore()
+    elif choice == '3':
+        print('Bye! ;-)')
+        break
     else:
       print('Please type 1, 2, or 3.')
