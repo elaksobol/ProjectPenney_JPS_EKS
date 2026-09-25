@@ -5,9 +5,9 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-from dataproc import score_seeds, save_scores
-from decks import add_decks
-from heatmaps import make_heatmaps, PATH_FIGURES
+from src.dataproc import score_decks, save_scores
+from data.decks import add_decks
+from src.heatmaps import make_heatmaps, PATH_FIGURES
 
 
 def show_heatmaps():
@@ -42,7 +42,7 @@ def add_and_rescore():
     return
 
   add_decks(int(answer))
-  save_scores(score_seeds())
+  save_scores(score_decks())
 
   make_heatmaps()
   print('Done! Choose option 1 to see the updated heatmaps.')
