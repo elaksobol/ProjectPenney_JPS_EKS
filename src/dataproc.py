@@ -9,14 +9,20 @@ from pathlib import Path
 PATH_DECKS = Path('data/decks/')
 PATH_SCORES = Path('data/scores/')
 
+# the two scoring methods
+
 METRICS = ('tricks', 'cards')
 
 # red = 1, black = 0
+#these are all the possible three card sequences
 
 LABELS = ['000', '001', '010', '011', '100', '101', '110', '111']
 
 
 def load_decks(filename: Path) -> tuple[np.ndarray, int]:
+    '''
+    This takes the bitpacked zipped file and unpacks each one. This returns the array of decks unpacked decks as well as the seed that was used to create them. 
+    '''
     
     loaded_data = np.load(filename)    
     decks = np.unpackbits(loaded_data['my_bits'], axis=1, count=52)    
@@ -25,6 +31,9 @@ def load_decks(filename: Path) -> tuple[np.ndarray, int]:
 
 
 def get_unscored_decks() -> list[Path]:
+    '''
+    This is used to make sure that the program does not rerun each deck if those decks were already used within a game. Through looking at the .npz files, this function looks through each one to see if they have a corresponding scored file that would look like scores_10_seed_1.npz. If there is no scored file then the function appends all the unscored decks into the unscored_decks list.
+    '''
     deck_files = list(PATH_DECKS.glob('*.npz'))
 
     unscored_decks = []
@@ -40,6 +49,9 @@ def get_unscored_decks() -> list[Path]:
 
 
 def deck_to_strings(decks: np.ndarray) -> list[str]:
+    '''
+    This function is used to change the array of 0s and 1s ints into characters to 
+    '''
     chars = decks.astype(np.uint8) + ord('0')
     return [row.tobytes().decode() for row in chars]
 

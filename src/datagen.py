@@ -13,6 +13,9 @@ SEED_BASE = 1
 def gen_decks(seed: int, 
                n_decks: int,
               ) -> np.ndarray:
+    '''
+    Generate the decks according to what the user inputs for n_decks. It uses a random number generation object according to the seed, which is incremented by one in the get_next_seed function. Each deck is an array of equal 1s (reds) and 0s (blacks). We then created an empty array to hold all the decks after they are shuffled. For each we choose to use uint8 as we found it uses less memory. We then looped through each array of 52 cars and shuffle them.
+    '''
     
     rng = np.random.default_rng(seed)
 
@@ -32,6 +35,8 @@ def get_next_seed() -> int:
     '''
     Read the last seed used, increment by 1,
     and update seed.json.
+
+    This was sourced from our class code notes.
     '''
     # Make sure the parent directory(s) exists
     PATH_SEED_LOG.parent.mkdir(parents=True, exist_ok=True)
@@ -61,6 +66,9 @@ def get_next_seed() -> int:
 def save_decks(decks: np.ndarray, 
                seed: int
               ) -> Path:
+    '''
+    This function takes in the incremented seed and the now filled array of the shuffled decks and after checking the paths, we bitpacked. We saved each bitpacked array using the number for n_decks and the seed for easy understanding. After we saved each bitpacked file as a numpy zipped file. 
+    '''
    
     PATH_DECKS.mkdir(parents=True, exist_ok=True)
 
