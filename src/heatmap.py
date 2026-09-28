@@ -53,8 +53,8 @@ def plot_heatmap(wins, ties, n_decks, metric):
                 yticklabels=BR_LABELS, ax=ax)
     
     ax.set_title(f'Probability of Win(Tie)\nScoring By {metric.capitalize()}\nN={n_decks:,}')
-    ax.set_xlabel("My Choice")
-    ax.set_ylabel("Opponent Choice")
+    ax.set_xlabel("Player Two")
+    ax.set_ylabel("Player One")
     plt.yticks(rotation=0)
 
     PATH_FIGURES.mkdir(parents=True, exist_ok=True)
