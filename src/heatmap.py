@@ -9,10 +9,16 @@ from src.dataproc import LABELS, PATH_SCORES
 
 PATH_FIGURES = Path('figures/')
 
+# For heatmap purposes, we converted the 0s to Bs and the 1s to Rs
 BR_LABELS = [label.replace('0', 'B').replace('1', 'R') for label in LABELS]
 
 
 def load_totals():
+  '''
+  This function reads the CSV file of the game scores. It sums the counts of wins/ties and indexes
+  them by player 1 or player 2. It outputs a pandas dataframe with all of the numeric values needed
+  (cards_wins, cards_ties, tricks_wins, tricks_ties, and n_decks) summed.
+  '''
   df = pd.read_csv(PATH_SCORES/'scores.csv', dtype={'P1': str,'P2': str})
   totals = df.groupby(['P1', 'P2']).sum(numeric_only=True)
   n_decks = totals['n_decks'].iloc[0]
@@ -20,6 +26,11 @@ def load_totals():
 
 
 def make_matrices(totals, n_decks, metric):
+  '''
+  This function turns the sums into two matrices and calculates the percentages of wins and ties.
+  One matrix is for wins, one is for ties. It runs a nested for loop so all player sequence matchups
+  are compared against each other (except for when P1 == P2, because that can't happen)
+  '''
   wins = np.full((len(LABELS), len(LABELS)), np.nan)
   ties = np.full((len(LABELS), len(LABELS)), np.nan)
 
@@ -34,6 +45,11 @@ def make_matrices(totals, n_decks, metric):
 
 
 def plot_heatmap(wins, ties, n_decks, metric):
+  '''
+  This function contains all of the heatmap plotting code. The heatmaps were designed after the
+  example designs shared on Blackboard, so diagonal cells are left blank (to ignore matching sequences).
+  The heatmaps get saved to PATH_FIGURES.
+  '''
     annot = []
     for b in range(len(LABELS)):
         row = []
@@ -43,7 +59,6 @@ def plot_heatmap(wins, ties, n_decks, metric):
             else: 
                 row.append(f'{wins[b, a]:.0f}({ties[b, a]:.0f})')
         annot.append(row)
-
 
     fig, ax = plt.subplots(figsize=(8,8))
     ax.set_facecolor('lightgray')
@@ -66,6 +81,10 @@ def plot_heatmap(wins, ties, n_decks, metric):
 
 
 def make_heatmaps():
+  '''
+  This function runs the whole process and is called by main.py. It loads the data,
+  then makes and saves the two heatmaps (one for scoring by cards and one for scoring by tricks).
+  '''
   totals, n_decks = load_totals()
 
   for metric in ('cards', 'tricks'):
