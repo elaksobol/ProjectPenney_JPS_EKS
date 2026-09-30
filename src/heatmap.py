@@ -24,6 +24,8 @@ def load_totals():
   (cards_wins, cards_ties, tricks_wins, tricks_ties, and n_decks) summed.
   '''
   df = pd.read_csv(PATH_SCORES/'scores.csv', dtype={'P1': str,'P2': str})
+
+  # This adds all the results from the scored decks
   totals = df.groupby(['P1', 'P2']).sum(numeric_only=True)
   n_decks = totals['n_decks'].iloc[0]
   return totals, n_decks
@@ -42,7 +44,11 @@ def make_matrices(totals, n_decks, metric):
     for b, P2 in enumerate(LABELS):
       if P1 == P2:
         continue
+
+      # Populates the wins matrix by looking through each combination
       wins[a, b] = totals.loc[(P1, P2), f'{metric}_wins'] / n_decks*100
+
+      # Populates the ties matrix by looking through each combination 
       ties[a, b] = totals.loc[(P1, P2), f'{metric}_ties'] / n_decks*100
   return wins, ties
 
