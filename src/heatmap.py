@@ -50,34 +50,34 @@ def plot_heatmap(wins, ties, n_decks, metric):
   example designs shared on Blackboard, so diagonal cells are left blank (to ignore matching sequences).
   The heatmaps get saved to PATH_FIGURES.
   '''
-    annot = []
-    for b in range(len(LABELS)):
-        row = []
-        for a in range(len(LABELS)):
-            if a == b:
-                row.append('')
-            else: 
-                row.append(f'{wins[b, a]:.0f}({ties[b, a]:.0f})')
-        annot.append(row)
+  annot = []
+  for b in range(len(LABELS)):
+      row = []
+      for a in range(len(LABELS)):
+          if a == b:
+              row.append('')
+          else: 
+              row.append(f'{wins[b, a]:.0f}({ties[b, a]:.0f})')
+      annot.append(row)
 
-    fig, ax = plt.subplots(figsize=(8,8))
-    ax.set_facecolor('lightgray')
+  fig, ax = plt.subplots(figsize=(8,8))
+  ax.set_facecolor('lightgray')
 
-    sns.heatmap(wins, annot=annot, fmt='', cmap='Blues', cbar=False, square=True,
-                linewidths=1, linecolor='white', vmin=0, vmax=100, xticklabels=BR_LABELS,
-                yticklabels=BR_LABELS, ax=ax)
+  sns.heatmap(wins, annot=annot, fmt='', cmap='Blues', cbar=False, square=True,
+              linewidths=1, linecolor='white', vmin=0, vmax=100, xticklabels=BR_LABELS,
+              yticklabels=BR_LABELS, ax=ax)
     
-    ax.set_title(f'Probability of Win(Tie)\nScoring By {metric.capitalize()}\nN={n_decks:,}')
-    ax.set_xlabel("Player Two")
-    ax.set_ylabel("Player One")
-    plt.yticks(rotation=0)
+  ax.set_title(f'Probability of Win(Tie)\nScoring By {metric.capitalize()}\nN={n_decks:,}')
+  ax.set_xlabel("Player Two")
+  ax.set_ylabel("Player One")
+  plt.yticks(rotation=0)
 
-    PATH_FIGURES.mkdir(parents=True, exist_ok=True)
-    filename = PATH_FIGURES / f'heatmap_{metric}.png'
-    fig.savefig(filename, dpi=200, bbox_inches='tight')
-    plt.close(fig)
+  PATH_FIGURES.mkdir(parents=True, exist_ok=True)
+  filename = PATH_FIGURES / f'heatmap_{metric}.png'
+  fig.savefig(filename, dpi=200, bbox_inches='tight')
+  plt.close(fig)
 
-    print(f'This file was saved as: {filename}')
+  print(f'This file was saved as: {filename}')
 
 
 def make_heatmaps():
