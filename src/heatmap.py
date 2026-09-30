@@ -25,7 +25,7 @@ def load_totals():
   '''
   df = pd.read_csv(PATH_SCORES/'scores.csv', dtype={'P1': str,'P2': str})
 
-  # This adds all the results from the scored decks
+  # This adds all the results from the scored decks that have the same combination
   totals = df.groupby(['P1', 'P2']).sum(numeric_only=True)
   n_decks = totals['n_decks'].iloc[0]
   return totals, n_decks
@@ -37,6 +37,8 @@ def make_matrices(totals, n_decks, metric):
   One matrix is for wins, one is for ties. It runs a nested for loop so all player sequence matchups
   are compared against each other (except for when P1 == P2, because that can't happen)
   '''
+
+  # Empty matrices
   wins = np.full((len(LABELS), len(LABELS)), np.nan)
   ties = np.full((len(LABELS), len(LABELS)), np.nan)
 
@@ -45,10 +47,10 @@ def make_matrices(totals, n_decks, metric):
       if P1 == P2:
         continue
 
-      # Populates the wins matrix by looking through each combination
+      # Populates the wins matrix by looking through each combination and dividing by number of decks to get percent
       wins[a, b] = totals.loc[(P1, P2), f'{metric}_wins'] / n_decks*100
 
-      # Populates the ties matrix by looking through each combination 
+      # Populates the ties matrix by looking through each combination and dividing by number of decks to get percent
       ties[a, b] = totals.loc[(P1, P2), f'{metric}_ties'] / n_decks*100
   return wins, ties
 
@@ -65,18 +67,24 @@ def plot_heatmap(wins, ties, n_decks, metric):
       row = []
       for a in range(len(LABELS)):
           if a == b:
+              # The empty diagonal cells
               row.append('')
           else: 
+              # Adds the numbers to the cells but rounds them to whole number
               row.append(f'{wins[b, a]:.0f}({ties[b, a]:.0f})')
       annot.append(row)
 
   fig, ax = plt.subplots(figsize=(8,8))
+
+  # Background color for plot
   ax.set_facecolor('lightgray')
 
+  # Organizing the plot 
   sns.heatmap(wins, annot=annot, fmt='', cmap='Blues', cbar=False, square=True,
               linewidths=1, linecolor='white', vmin=0, vmax=100, xticklabels=BR_LABELS,
               yticklabels=BR_LABELS, ax=ax)
-    
+
+  # Set titles and labels
   ax.set_title(f'Probability of Win(Tie)\nScoring By {metric.capitalize()}\nN={n_decks:,}')
   ax.set_xlabel("Player Two")
   ax.set_ylabel("Player One")
@@ -97,6 +105,7 @@ def make_heatmaps():
   '''
   totals, n_decks = load_totals()
 
+  # Make a heatmap for each scoring combo
   for metric in ('cards', 'tricks'):
     wins, ties = make_matrices(totals, n_decks, metric)
     plot_heatmap(wins, ties, n_decks, metric)
