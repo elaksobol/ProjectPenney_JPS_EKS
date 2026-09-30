@@ -1,12 +1,16 @@
+
+# Import statements
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-
+# LABELS = the 8 possible sequences
+# PATH_SCORES = where scores.csv is
 from src.dataproc import LABELS, PATH_SCORES
 
+# This is where the finished heatmaps go
 PATH_FIGURES = Path('figures/')
 
 # For heatmap purposes, we converted the 0s to Bs and the 1s to Rs
@@ -38,8 +42,8 @@ def make_matrices(totals, n_decks, metric):
     for b, P2 in enumerate(LABELS):
       if P1 == P2:
         continue
-      wins[b, a] = totals.loc[(P1, P2), f'{metric}_wins'] / n_decks*100
-      ties[b, a] = totals.loc[(P1, P2), f'{metric}_ties'] / n_decks*100
+      wins[a, b] = totals.loc[(P1, P2), f'{metric}_wins'] / n_decks*100
+      ties[a, b] = totals.loc[(P1, P2), f'{metric}_ties'] / n_decks*100
   return wins, ties
 
 
